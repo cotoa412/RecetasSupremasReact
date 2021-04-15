@@ -12,7 +12,7 @@ export const Header = styled.View`
 `;
 
 export const Avatar = styled.Image`
-    width: 32px;
+    width: 35px;
     height 32px;
     padding-top: 9%
     border-radius: 16px;

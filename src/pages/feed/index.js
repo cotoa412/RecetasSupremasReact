@@ -6,6 +6,9 @@ import 'react-native-gesture-handler';
 // import { Container } from './styles';
 import { Post, Header, Avatar, Name, Image, Description, Loading } from './styles';
 
+import userPic from './../../assets/UserPic.png';
+
+const axios = require('axios');
 
 const feed = () => {
   const [feed, setFeed] = useState([]);
@@ -23,7 +26,7 @@ const feed = () => {
     const response = await fetch(
       `http://localhost:3000/posts?limit=3&page=${pageNumber}`
     );
-
+    
     const data = await response.json();
     const totalItems = response.headers.get('X-Total-Count');
 
@@ -60,7 +63,7 @@ const feed = () => {
           renderItem ={({item}) => (
             <Post>
               <Header>     
-                <Avatar source = {{uri : "http://localhost:3000/uploads//20210320_133524.jpg"}}/>
+                <Avatar source = {userPic}/>
                 {/* <Name>{item.author.name}</Name>   */}
                 <Name>{item.recipe_name}</Name>
               </Header>
