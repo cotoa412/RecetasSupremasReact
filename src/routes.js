@@ -9,7 +9,7 @@ import Login from './pages/login';
 import Settings from './pages/settings';
 import Feed from './pages/feed';
 
-import logo from './assets/andres.png';
+import logo from './assets/logo.png';
 
 // import { Container } from './styles';
 
