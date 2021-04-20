@@ -10,6 +10,13 @@ import {
   Alert
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
+import feed from '../feed';
+import register from '../register';
+
+
+
 export default class SignUpView extends Component {
 
   constructor(props) {
@@ -21,11 +28,22 @@ export default class SignUpView extends Component {
     }
   }
 
-  onClickListener = (viewId) => {
-    Alert.alert("Alert", "Button pressed "+viewId);
-  }
-
+  // onClickListener = (viewId) => {
+  //   Alert.alert("Alert", "Button pressed "+viewId);
+  // }
+  
+  
   render() {
+
+    const pressHandlerRegister = () => {
+      this.props.navigation.navigate('Register');
+    }
+    
+    const pressHandlerLogin = () => {
+      this.props.navigation.navigate('Feed');
+    }
+    
+
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -44,10 +62,10 @@ export default class SignUpView extends Component {
               onChangeText={(password) => this.setState({password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.onClickListener('sign_up')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={pressHandlerLogin}>
           <Text style={styles.signUpText}>Login</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('sign_up')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={pressHandlerRegister}>
           <Text style={styles.signUpText}>Sign up</Text>
         </TouchableHighlight>
       </View>
