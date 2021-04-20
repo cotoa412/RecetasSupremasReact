@@ -8,6 +8,7 @@ import Register from './pages/register';
 import Login from './pages/login';
 import Settings from './pages/settings';
 import Feed from './pages/feed';
+import Profile from './pages/perfil'
 
 const Stack = createStackNavigator();
 const Tabs  = createBottomTabNavigator();
@@ -46,7 +47,7 @@ const TabsScreen = () => (
         </View>
       )
     }} />
-    <Tabs.Screen name= "Register" component={Register} options = {{
+    <Tabs.Screen name= "Profile" component={Profile} options = {{
       tabBarIcon: ({focused}) => (
         <View>
           <Image
@@ -101,6 +102,7 @@ export const AppNavigator = () => (
       <Stack.Screen name="Feed" component={TabsScreen}  />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   </NavigationContainer>
 );
