@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AuthenticationService from '../../services/AuthenticationService';
 import {
   StyleSheet,
   Text,
@@ -15,8 +16,10 @@ export default class SignUpView extends Component {
   constructor(props) {
     super(props);
     state = {
-      fullName: '',
-      email   : '',
+      name: '',
+      surname: '',
+      username: '',
+      email: '',
       password: '',
     }
   }
@@ -25,6 +28,9 @@ export default class SignUpView extends Component {
     Alert.alert("Alert", "Button pressed "+viewId);
   }
 
+  handleSubmit = () => {
+    AuthenticationService.register(this.state.name, this.state.surname, this.state.username, this.state.email, this.state.password);
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -33,7 +39,7 @@ export default class SignUpView extends Component {
               placeholder="Name"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(fullName) => this.setState({fullName})}/>
+              onChangeText={(name) => this.setState({name})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -41,7 +47,7 @@ export default class SignUpView extends Component {
               placeholder="Surname"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(fullName) => this.setState({fullName})}/>
+              onChangeText={(surname) => this.setState({surname})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -49,7 +55,7 @@ export default class SignUpView extends Component {
               placeholder="Username"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(fullName) => this.setState({fullName})}/>
+              onChangeText={(username) => this.setState({username})}/>
         </View>
 
         <View style={styles.inputContainer}>
@@ -68,7 +74,7 @@ export default class SignUpView extends Component {
               onChangeText={(password) => this.setState({password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.onClickListener('sign_up')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.handleSubmit()}>
           <Text style={styles.signUpText}>Sign up</Text>
         </TouchableHighlight>
       </View>

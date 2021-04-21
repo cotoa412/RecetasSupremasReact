@@ -2,13 +2,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, FlatList, View, Text } from 'react-native';
 import 'react-native-gesture-handler';
+import axios from 'axios';
+
 
 // import { Container } from './styles';
 import { Post, Header, Avatar, Name, Image, Description, Loading } from './styles';
 
 import userPic from './../../assets/UserPic.png';
 
-const axios = require('axios');
 
 const feed = ({navigation}) => {
   const [feed, setFeed] = useState([]);

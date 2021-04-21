@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import AuthenticationService from '../../services/AuthenticationService';
+
 import {
   StyleSheet,
   Text,
@@ -15,34 +17,34 @@ import { useNavigation } from '@react-navigation/native';
 import feed from '../feed';
 import register from '../register';
 
-
-
 export default class SignUpView extends Component {
 
   constructor(props) {
     super(props);
     state = {
-      fullName: '',
       email   : '',
       password: '',
     }
   }
 
-  // onClickListener = (viewId) => {
-  //   Alert.alert("Alert", "Button pressed "+viewId);
+  onClickListener = (viewId) => {
+    Alert.alert("Alert", "Button pressed "+viewId);
+  }
+
+  // handleSubmit = () => {
+  //   AuthenticationService.login(this.state.email, this.state.password);
   // }
-  
-  
+
   render() {
 
     const pressHandlerRegister = () => {
       this.props.navigation.navigate('Register');
     }
-    
+
     const pressHandlerLogin = () => {
+      AuthenticationService.login(this.state.email, this.state.password);
       this.props.navigation.navigate('Feed');
     }
-    
 
     return (
       <View style={styles.container}>
@@ -51,7 +53,7 @@ export default class SignUpView extends Component {
               placeholder="Username or email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(fullName) => this.setState({fullName})}/>
+              onChangeText={(email) => this.setState({email})}/>
         </View>
         
         <View style={styles.inputContainer}>
