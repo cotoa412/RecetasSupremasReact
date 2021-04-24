@@ -8,6 +8,7 @@ import Register from './pages/register';
 import Login from './pages/login';
 import Settings from './pages/settings';
 import Feed from './pages/feed';
+import AddPost from './pages/addPost'
 
 const Stack = createStackNavigator();
 const Tabs  = createBottomTabNavigator();
@@ -46,7 +47,23 @@ const TabsScreen = () => (
         </View>
       )
     }} />
-    <Tabs.Screen name= "Register" component={Register} options = {{
+    <Tabs.Screen name= "AddPost" component={AddPost} options = {{
+      tabBarIcon: ({focused}) => (
+        <View>
+          <Image
+           source = {require('./assets/add.png')} 
+           resizeMode ="contain"
+           style = {{
+             width: 25,
+             height: 25,
+             tintColor: focused ? '#FF8585' : "#000000"
+           }}
+          />
+        </View> 
+      )
+    }} />
+
+<Tabs.Screen name= "Register" component={Register} options = {{
       tabBarIcon: ({focused}) => (
         <View>
           <Image
@@ -58,10 +75,10 @@ const TabsScreen = () => (
              tintColor: focused ? '#FF8585' : "#000000"
            }}
           />
-          
-        </View>
+        </View> 
       )
     }} />
+    
     <Tabs.Screen name= "Settings" component={Settings} options = {{
       tabBarIcon: ({focused}) => (
         <View>
