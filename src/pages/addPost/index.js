@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableHighlight, Image, Alert } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-
-import ImagePicker from 'react-native-image-crop-picker';
-import { RectButton } from 'react-native-gesture-handler';
+import RNRestart from 'react-native-restart';
+import { useIsFocused } from '@react-navigation/native'
 
 
 const axios = require('axios').default;
 
-export default class SignUpView extends Component {
+import FormData from 'form-data'
+var file = require('file-system');
+import DocumentPicker from 'react-native-document-picker';
 
+
+const initialState = {
+    recipe_name: '',
+    desc: '',
+    tips:'',
+    postImage: null,
+    uniqueValue: 1
+}
+
+export default class SignUpView extends Component {
+  state = initialState;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,64 +29,111 @@ export default class SignUpView extends Component {
       desc: '',
       tips:'',
       postImage: null,
+      uniqueValue: 1
     }
   }
 
-  
+  resetState = () => {
+    this.setState(initialState);
+  }
+
   render() {
+
 
     const {recipe_name} = this.state
     const {desc} = this.state
     const {postImage} = this.state
 
-    const handlerChoosePhoto = () => {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true
-          }).then(image => {
-            console.log(image);
-            this.setState({postImage: image.path})
-          });
+
+    const handlerChoosePhoto  = async () => {
+      
+      try {
+        const res = await DocumentPicker.pick({
+          type: [DocumentPicker.types.images],
+        });
+        console.log(
+          res.uri,
+          res.type, // mime type
+          res.name,
+          res.size,
+        );
+        this.setState({postImage: res})
+      } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+          // User cancelled the picker, exit any dialogs or menus and move on
+        } else {
+          throw err;
+        }
+      }
     }
+
+    const sendPostRequest = async () => {
+
+      const form = new FormData();
+      
+      form.append('recipe_name', recipe_name);
+      form.append('description', desc);
+      form.append('tips', "");
+      form.append('postImage', postImage);
+      console.log(form)
+      try {
+          const resp = await axios.post('http://localhost:3000/posts', form)
+          
+          .then((response) => {
+            console.log(response);
+            forceRemount();
+          })
+         
+        }catch(error) {
+              if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+              } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+              }
+          }
+  };
+  
     
+
     const handlerPost = () => {
      
       console.log(recipe_name)
       console.log(desc)
       console.log(postImage)
-
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/posts',
-        headers: '',
-        data: {
-          recipe_name: recipe_name,
-          description: desc,
-          tips:'',
-          postImage: postImage
-        }
-        
-      }).then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error.data);
-      });
-    }
+      this.resetState()
+      this.textInput.clear()
+      this.textInput1.clear()
+      Alert.alert(null,"Post created successfully")
+      // sendPostRequest();
     
+
+    }
+  
+
+  
 
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
+          <TextInput ref={input1 => { this.textInput1 = input1 }} style={styles.inputs}
               placeholder="Recipe name"
               underlineColorAndroid='transparent'
-              onChangeText={(recipe_name) => this.setState({recipe_name})}/>
+              onChangeText={(recipe_name) => this.setState({recipe_name})}
+              />
         </View>
         
         <View style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
+          <TextInput ref={input => { this.textInput = input }} style={styles.inputs}
               placeholder="Write a description"
               underlineColorAndroid='transparent'
               onChangeText={(desc) => this.setState({desc})}/>
@@ -84,7 +142,7 @@ export default class SignUpView extends Component {
         <View>
           {postImage && (
             <Image
-                source = {{uri: postImage}}
+                source = {{uri: postImage.uri}}
                 style = {{width: 300, height: 300, marginBottom: 20}}
             />
           )}

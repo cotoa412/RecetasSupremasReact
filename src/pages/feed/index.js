@@ -36,7 +36,7 @@ const feed = ({navigation}) => {
 
     setTotal(Math.ceil(totalItems / 5));
     setFeed(data);
-    // setPage(pageNumber + 1);
+    // setPage(pageNumber + 1)
     setLoading(false);
   }
 
@@ -59,7 +59,7 @@ const feed = ({navigation}) => {
         <FlatList 
           data={feed}
           keyExtractor={post => String(post._id)}
-          onEndReached={() => loadPage()}
+          // onEndReached={() => loadPage()}
           onEndReachedThreshold={0.1}
           onRefresh={refreshList}
           refreshing={refreshing}
