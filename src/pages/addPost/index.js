@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableHighlight, Image, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import RNRestart from 'react-native-restart';
 import { useIsFocused } from '@react-navigation/native'
@@ -77,33 +78,56 @@ export default class SignUpView extends Component {
       form.append('postImage', postImage);
       console.log(form)
       try {
+          const userId = await AsyncStorage.getItem('userId')
           const resp = await axios.post('http://localhost:3000/posts', form)
-          
           .then((response) => {
-            console.log(response);
-            forceRemount();
+            console.log(response)
+            const postId = response.data.createdPost._id
+            console.log('THE POST ID: ', postId)
+            console.log('User id: ',userId)
+            const result = [userId, postId]
+            savePostId(userId,postId)
+            //forceRemount();
+            console.log('THE RESULT: ', result)
+            return result
           })
          
         }catch(error) {
               if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                console.error(error.response.data);
+                console.error(error.response.status);
+                console.error(error.response.headers);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                 // http.ClientRequest in node.js
-                console.log(error.request);
+                console.error(error.request);
               } else {
                 // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
+                console.error('Error', error.message);
               }
           }
   };
-  
-    
+
+    const savePostId = (userId,postId) =>{
+      console.log('This is the last id: ', userId)
+      console.log('This is the last id: ', postId)
+      axios({
+        method: 'patch',
+        url: 'http://localhost:3000/users/post/'+userId,
+        data: {"post":postId}
+      })
+      .then(response => {
+        console.log('the ultimate response: ',response)
+        return response
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      });
+    }
 
     const handlerPost = () => {
      
@@ -114,8 +138,7 @@ export default class SignUpView extends Component {
       this.textInput.clear()
       this.textInput1.clear()
       Alert.alert(null,"Post created successfully")
-      // sendPostRequest();
-    
+      sendPostRequest();
 
     }
   

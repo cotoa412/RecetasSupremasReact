@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import AuthenticationService from '../../services/AuthenticationService';
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt from 'jwt-decode'
+
+import userPic from './../../assets/UserPic.png';
+
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
+  FlatList,
   Button,
   TouchableHighlight,
   Image,
@@ -14,27 +22,88 @@ export default class SignUpView extends Component {
 
   constructor(props) {
     super(props);
-    state = {
-      fullName: '',
-      email   : '',
-      password: '',
+    this.state = {
+      userName: '',
+      posts: [],
+      postNumber: ''
+    }
+  }
+  async componentDidMount(){
+    try{
+      const currentUsername = await AsyncStorage.getItem('user')
+      const userData = jwt(currentUsername)
+      console.log(userData)
+      axios({
+        method: 'get',
+        url: 'http://localhost:3000/users/'+userData.userId,
+      })
+      .then(response => {
+        this.setState({userName: response.data.username})
+        this.setState({posts: response.data.postCount})
+        this.setState({postNumber: response.data.postCount.length})
+        return response.data.postCount
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      });
+    } catch (e){
+      console.error(e)
     }
   }
 
-  onClickListener = (viewId) => {
-    Alert.alert("Alert", "Button pressed "+viewId);
-  }
+  async getPosts(postArray){
+    let array = [];
+    let url = postArray;
+    for (let i = 0; i < url.length; i++)   {
+      try {
+        let res = await axios({
+          method: 'get',
+          url: 'http://localhost:3000/posts/'+url[i]
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(err => {
+          console.error(err)
+          throw err
+        });
+        console.log('HERE::     ',res)
+        array.push(res);
+      }
+      catch (e) {
+        console.error(e.message);
+      }
+    };
+    console.log(array)
+   return array
+  };
 
   render() {
+    const posts = this.state.posts
     return (
-      <View style={styles.container}>
-        <Text style={styles.signUpText}>Nombre Completo</Text>
+      <View>
+        <FlatList 
+          data={this.getPosts(posts)}
+          onEndReachedThreshold={0.1}
+          onRefresh={refreshList}
+          refreshing={refreshing}
+          ListFooterComponent={loading && <Loading/>}
+          renderItem ={({item}) => (
+            <Post>
+              <Header>     
+                <Avatar source = {userPic}/>
+                <Name>{item.recipe_name}{"\n"}Insert Author name here</Name>
+                <Text></Text>
+              </Header>
+              <Image ratio ={0.834} source = {{uri : "http://localhost:3000/" + item.postImage}}/>
 
-        <Text style={styles.signUpText}>Bio</Text>
-
-        <Text style={styles.signUpText}>Numero de Recetas creadas</Text>
-
-        <Image ratio ={0.834}/>
+              <Description>
+                {item.description}
+              </Description>
+            </Post>
+          )}
+        />
       </View>
     );
   }
@@ -84,5 +153,7 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: 'black',
+    marginTop: 20,
+    fontSize: 30
   }
 });

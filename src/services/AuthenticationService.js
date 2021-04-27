@@ -8,6 +8,13 @@ class AuthenticationService {
       await AsyncStorage.setItem('user', value)
       const currentUser = await AsyncStorage.getItem('user')
       console.log('From localStorage: ',jwt(currentUser))
+      const currentUserDecrypted = jwt(currentUser)
+      const currentUserId = currentUserDecrypted.userId
+      console.log('From localStorage user id: ', currentUserId)
+      await AsyncStorage.setItem('userId', currentUserId)
+      const currentUserIdRes = await AsyncStorage.getItem('userId')
+      console.log('From localStorage user id: ', currentUserIdRes)
+
     } catch (e) {
       console.error(e)
     }
@@ -19,19 +26,19 @@ class AuthenticationService {
         "password": password
     };  
     const token = axios({
-        method: 'post',
-        url: 'http://localhost:3000/users/login',
-        data: user
-      })
-      .then(response => {
-        this.storeData(response.data.token)
-        return response.data.token;
-      })
-      .catch(err => {
-        console.error(err);
-        throw err;
-      });
-      return token
+      method: 'post',
+      url: 'http://localhost:3000/users/login',
+      data: user
+    })
+    .then(response => {
+      this.storeData(response.data.token)
+      return response.data.token;
+    })
+    .catch(err => {
+      console.error(err);
+      throw err;
+    });
+    return token
   }
 
   logout() {
