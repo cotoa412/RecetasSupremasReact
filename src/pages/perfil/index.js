@@ -68,7 +68,6 @@ export default class SignUpView extends Component {
           console.error(err)
           throw err
         });
-        console.log('HERE::     ',res)
         array.push(res);
       }
       catch (e) {
@@ -86,9 +85,9 @@ export default class SignUpView extends Component {
         <FlatList 
           data={this.getPosts(posts)}
           onEndReachedThreshold={0.1}
-          onRefresh={refreshList}
-          refreshing={refreshing}
-          ListFooterComponent={loading && <Loading/>}
+          // onRefresh={refreshList}
+          // refreshing={refreshing}
+          // ListFooterComponent={loading && <Loading/>}
           renderItem ={({item}) => (
             <Post>
               <Header>     
