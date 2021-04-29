@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, FlatList, View, Text } from 'react-native';
+import {FlatList, View, Text, Alert } from 'react-native';
 import 'react-native-gesture-handler';
 import axios from 'axios';
+import {Icon, Button} from 'native-base';
 
 
 // import { Container } from './styles';
@@ -17,9 +18,18 @@ const feed = ({navigation}) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [itemId, setId] = useState()
 
-  const pressHandler = () => {
-    navigation.navigate('Register');
+  const commentsPressHandler = ({item}) => {
+    console.log("comment pressed")
+    console.log("id", item._id)
+    navigation.navigate('Comment', {
+      itemId: item._id,
+      recipe_name: item.recipe_name,
+      postImage: item.postImage,
+      description: item.description    
+    })
+    
   }
 
   async function loadPage(pageNumber = page, shouldRefresh = false) {{
@@ -30,12 +40,11 @@ const feed = ({navigation}) => {
     const response = await fetch(
       `http://localhost:3000/posts`
     );
-    
     const data = await response.json();
     const totalItems = response.headers.get('X-Total-Count');
-
     setTotal(Math.ceil(totalItems / 5));
     setFeed(data);
+    console.log("feed", feed)
     // setPage(pageNumber + 1)
     setLoading(false);
   }
@@ -76,11 +85,27 @@ const feed = ({navigation}) => {
               <Description>
                 {item.description}
               </Description>
+
+              <Button transparent onPress = {() => commentsPressHandler({item})} style = {{marginLeft: 5, padding: 5, borderBottomColor: '#000000', borderBottomWidth: 1,}}>
+                <Image source = {require('../../assets/comments.png')} 
+                  resizeMode ="contain"
+                  style = {{
+                  width: 25,
+                  height: 25,
+                  padding: 5,
+                  tintColor: '#FF8585'
+                   }}
+                   />
+                <Text> Add a comment</Text>
+                <Text>                                                                   </Text>
+              </Button>
+              
             </Post>
           )}
         />
       </View>
     );
 }
+
 
 export default feed;

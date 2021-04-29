@@ -10,6 +10,7 @@ import Settings from './pages/settings';
 import Feed from './pages/feed';
 import AddPost from './pages/addPost'
 import Profile from './pages/perfil'
+import Comment from './pages/comments'
 
 const Stack = createStackNavigator();
 const Tabs  = createBottomTabNavigator();
@@ -115,11 +116,13 @@ const style = StyleSheet.create({
 export const AppNavigator = () => (
   <NavigationContainer>
     <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Feed" component={TabsScreen}  />
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Feed" component={TabsScreen}  />
+      
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Comment" component={Comment} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -32,7 +32,7 @@ export default class SignUpView extends Component {
     try{
       const currentUsername = await AsyncStorage.getItem('user')
       const userData = jwt(currentUsername)
-      console.log(userData)
+      console.log("user data", userData)
       axios({
         method: 'get',
         url: 'http://localhost:3000/users/'+userData.userId,
@@ -44,11 +44,11 @@ export default class SignUpView extends Component {
         return response.data.postCount
       })
       .catch(err => {
-        console.error(err);
+        console.error("error 1",err);
         throw err;
       });
     } catch (e){
-      console.error(e)
+      console.error("error 2",e)
     }
   }
 
@@ -65,13 +65,13 @@ export default class SignUpView extends Component {
           return response.data
         })
         .catch(err => {
-          console.error(err)
+          console.error("error 3", err)
           throw err
         });
         array.push(res);
       }
       catch (e) {
-        console.error(e.message);
+        console.error("error 4", e.message);
       }
     };
     console.log(array)
