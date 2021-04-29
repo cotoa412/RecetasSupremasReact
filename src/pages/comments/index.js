@@ -23,9 +23,35 @@ const comment = ({navigation, route}) => {
           description: description
         },]
     
+    const CommentDATA = [
+      {
+        id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+        username: "Shamuel", 
+        comment: "What an amazing dish",
+      },
+      {
+        id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+        username: "Andres", 
+        comment: "Love the aesthetic!",
+      },
+      {
+        id: "58694a0f-3da1-471f-bd96-145571e29d72",
+        username: "Andres", 
+        comment: "It looks so gooood",
+      },
+    ];
+  
     
     const submitPressHandler = () => {
-        comments.push(comment)
+      const commentPush = [
+        {
+          id: Math.random(),
+          username: "Andres test",
+          comment: comment
+        }]
+
+      CommentDATA.push(commentPush)
+      console.log(CommentDATA)
         
     }
         
@@ -79,9 +105,16 @@ const comment = ({navigation, route}) => {
           )}
           
           />
-        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>What an amazing {recipe_name}</Text>
-        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>Love the aesthetic!</Text>
-        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>It looks so gooood</Text>
+        <FlatList
+        data={CommentDATA}
+        keyExtractor={item => item.id}
+        renderItem = {({item}) => (
+
+        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>{item.comment}</Text>
+        
+        )}
+          
+         />
       </View>
     );
 }

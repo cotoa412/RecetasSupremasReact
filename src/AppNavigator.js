@@ -116,7 +116,7 @@ const style = StyleSheet.create({
 export const AppNavigator = () => (
   <NavigationContainer>
     <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Feed" component={TabsScreen}  />
+      <Stack.Screen name="Feed" component={TabsScreen}  />
       <Stack.Screen name="Login" component={Login} />
       
       <Stack.Screen name="Register" component={Register} />
