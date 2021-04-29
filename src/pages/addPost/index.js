@@ -82,7 +82,7 @@ export default class SignUpView extends Component {
           const resp = await axios.post('http://localhost:3000/posts', form)
           .then((response) => {
             console.log(response)
-            const postId = response.data.createdPost._id
+            const postId = response.data.createdPost
             console.log('THE POST ID: ', postId)
             console.log('User id: ',userId)
             const result = [userId, postId]
@@ -120,7 +120,7 @@ export default class SignUpView extends Component {
         data: {"post":postId}
       })
       .then(response => {
-        console.log('the ultimate response: ',response)
+        //console.log('the ultimate response: ',response)
         return response
       })
       .catch(err => {

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import AuthenticationService from '../../services/AuthenticationService';
+
 import {
   StyleSheet,
   Text,
@@ -21,15 +23,16 @@ export default class SignUpView extends Component {
     }
   }
 
-  onClickListener = (viewId) => {
-    Alert.alert("Alert", "Button pressed "+viewId);
+  out = () => {
+    AuthenticationService.logout();
+    this.props.navigation.navigate('Login');
   }
 
   render() {
     return (
       <View style={styles.container}>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.onClickListener('sign_up')}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.out()}>
           <Text style={styles.signUpText}>Cerrar Sesion</Text>
         </TouchableHighlight>
         <TouchableHighlight style={[styles.buttonContainer, styles.deleteButton]} onPress={() => this.onClickListener('sign_up')}>

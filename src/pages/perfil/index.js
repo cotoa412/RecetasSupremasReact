@@ -4,8 +4,8 @@ import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt from 'jwt-decode'
 
-import userPic from './../../assets/UserPic.png';
-
+import userPic from '../../assets/UserPic.png';
+import { Post, Header, Avatar, Name, Image, Description, Loading } from './styles';
 import {
   StyleSheet,
   Text,
@@ -14,7 +14,6 @@ import {
   FlatList,
   Button,
   TouchableHighlight,
-  Image,
   Alert
 } from 'react-native';
 
@@ -25,14 +24,15 @@ export default class SignUpView extends Component {
     this.state = {
       userName: '',
       posts: [],
-      postNumber: ''
+      postNumber: '',
+      postResult: []
     }
   }
-  async componentDidMount(){
+   async componentDidMount(){
     try{
       const currentUsername = await AsyncStorage.getItem('user')
       const userData = jwt(currentUsername)
-      console.log(userData)
+      //console.log(userData)
       axios({
         method: 'get',
         url: 'http://localhost:3000/users/'+userData.userId,
@@ -41,6 +41,7 @@ export default class SignUpView extends Component {
         this.setState({userName: response.data.username})
         this.setState({posts: response.data.postCount})
         this.setState({postNumber: response.data.postCount.length})
+        
         return response.data.postCount
       })
       .catch(err => {
@@ -52,56 +53,55 @@ export default class SignUpView extends Component {
     }
   }
 
-  async getPosts(postArray){
-    let array = [];
-    let url = postArray;
-    for (let i = 0; i < url.length; i++)   {
-      try {
-        let res = await axios({
-          method: 'get',
-          url: 'http://localhost:3000/posts/'+url[i]
-        })
-        .then(response => {
-          return response.data
-        })
-        .catch(err => {
-          console.error(err)
-          throw err
-        });
-        array.push(res);
-      }
-      catch (e) {
-        console.error(e.message);
-      }
-    };
-    console.log(array)
-   return array
-  };
-
+  // async getPosts(postArray){
+  //   let array = [];
+  //   let url = postArray;
+  //   for (let i = 0; i < url.length; i++)   {
+  //     try {
+  //       let res = await axios({
+  //         method: 'get',
+  //         url: 'http://localhost:3000/posts/'+url[i]
+  //       })
+  //       .then(response => {
+  //         return response.data
+  //       })
+  //       .catch(err => {
+  //         console.error(err)
+  //         throw err
+  //       });
+  //       array.push(res);
+  //     }
+  //     catch (e) {
+  //       console.error(e.message);
+  //     }
+  //   };
+  //   console.log('Here::    ',array)
+  //  return array
+  // };
+  
   render() {
     const posts = this.state.posts
+    console.log('Por favorr!: ',posts)
     return (
       <View>
+        <Text>{this.state.userName}</Text>
+        <Text>{this.state.postNumber}</Text>
         <FlatList 
-          data={this.getPosts(posts)}
-          onEndReachedThreshold={0.1}
-          // onRefresh={refreshList}
-          // refreshing={refreshing}
-          // ListFooterComponent={loading && <Loading/>}
+          data={posts}
           renderItem ={({item}) => (
             <Post>
               <Header>     
                 <Avatar source = {userPic}/>
                 <Name>{item.recipe_name}{"\n"}Insert Author name here</Name>
-                <Text></Text>
+                
               </Header>
               <Image ratio ={0.834} source = {{uri : "http://localhost:3000/" + item.postImage}}/>
-
               <Description>
                 {item.description}
               </Description>
             </Post>
           )}
+          //keyExtractor={item => item.id.toString()}
         />
       </View>
     );

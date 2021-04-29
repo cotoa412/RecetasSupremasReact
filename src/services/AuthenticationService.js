@@ -41,8 +41,12 @@ class AuthenticationService {
     return token
   }
 
-  logout() {
-    AsyncStorage.removeItem("user");
+  logout = async () => {
+    try {
+      await AsyncStorage.removeItem('user')
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   register = async(name,surname,username, email, password) => {
@@ -67,9 +71,32 @@ class AuthenticationService {
     });
   }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+  delete = () =>{
+    
   }
+
+  getCurrentUser = async() => {
+    try{
+      const currentUsername = await AsyncStorage.getItem('user')
+      const userData = jwt(currentUsername)
+      console.log(userData)
+      axios({
+        method: 'get',
+        url: 'http://localhost:3000/users/'+userData.userId,
+      })
+      .then(response => {
+        return response.data
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      })
+    } catch (e){
+      console.error(e)
+    }
+  }
+
+
 }
 
 export default new AuthenticationService();
