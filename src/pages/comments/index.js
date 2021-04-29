@@ -79,7 +79,10 @@ const comment = ({navigation, route}) => {
           )}
           
           />
-        </View>
+        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>What an amazing {recipe_name}</Text>
+        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>Love the aesthetic!</Text>
+        <Text style = {{backgroundColor: '#FFFFFF', padding: 10, marginTop: 15, marginLeft: 10, marginRight: 10}}>It looks so gooood</Text>
+      </View>
     );
 }
 
