@@ -8,4 +8,4 @@
 - React Native
 - CSS
 - Javascript
-- NodeJS
+- NodeJS 
